@@ -1,0 +1,17 @@
+{
+    "name": "soil/ack-service",
+    "version": "0.0.1",
+    "dist": {
+        "url": "https://github.com/soilby/ack-service",
+        "type": "vcs"
+    },
+    "autoload": {
+        "psr-4": {
+            "Soil\\AckService\\": "Soil"
+        }
+    },
+    "require": {
+        "php": ">=5.4",
+        "easyrdf/easyrdf": "dev-master"
+    }
+}
