@@ -27,7 +27,13 @@ class AckDoc {
      * @var \DateTime
      * @ODM\Date
      */
-    protected $date;
+    protected $creationDate;
+
+    /**
+     * @var \DateTime
+     * @ODM\Date
+     */
+    protected $lastDate;
 
     /**
      * @var string
@@ -40,6 +46,12 @@ class AckDoc {
      * @ODM\String
      */
     protected $ackParam;
+
+    /**
+     * @var int
+     * @ODM\Int
+     */
+    protected $times;
 
     /**
      * @return string
@@ -76,17 +88,17 @@ class AckDoc {
     /**
      * @return \DateTime
      */
-    public function getDate()
+    public function getCreationDate()
     {
-        return $this->date;
+        return $this->creationDate;
     }
 
     /**
      * @param \DateTime $date
      */
-    public function setDate($date)
+    public function setCreationDate($date)
     {
-        $this->date = $date;
+        $this->creationDate = $date;
     }
 
     /**
@@ -105,6 +117,47 @@ class AckDoc {
         $this->id = $id;
     }
 
+    /**
+     * @return int
+     */
+    public function getTimes()
+    {
+        return $this->times;
+    }
 
+    /**
+     * @param int $times
+     */
+    public function setTimes($times)
+    {
+        $this->times = $times;
+    }
+
+    public function increaseTimes($number = 1) {
+        $this->times += $number;
+        if ($this->times < 0) $this->times = 0;
+    }
+
+    /**
+     * @return \DateTime
+     */
+    public function getLastDate()
+    {
+        return $this->lastDate;
+    }
+
+    /**
+     * @param \DateTime $lastDate
+     */
+    public function setLastDate($lastDate)
+    {
+        $this->lastDate = $lastDate;
+    }
+
+
+
+    public function __construct()   {
+        $this->creationDate = new \DateTime();
+    }
 
 } 

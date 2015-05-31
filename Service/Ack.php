@@ -20,16 +20,45 @@ class Ack {
         $this->odm = $odm;
     }
 
-    public function place($category, $param) {
-        $doc = new AckDoc();
-        $doc->setCategory($category);
-        $doc->setAckParam($param);
 
-        $this->odm->persist($doc);
-        $this->odm->flush();
+    public function decrease($category, $param) {
+        $doc = $this->test($category, $param);
+        if ($doc)   {
+            $doc->increaseTimes(-1);
+            $doc->setLastDate(new \DateTime());
 
+            $this->odm->flush($doc);
+
+            return $doc;
+        }
+
+        return null;
     }
 
+    public function place($category, $param) {
+        $doc = $this->test($category, $param);
+        if ($doc)   {
+            $doc->increaseTimes();
+        }
+        else {
+            $doc = new AckDoc();
+            $doc->setCategory($category);
+            $doc->setAckParam($param);
+
+            $this->odm->persist($doc);
+        }
+        $doc->setLastDate(new \DateTime());
+
+
+        $this->odm->flush($doc);
+    }
+
+    /**
+     * @param $category
+     * @param $param
+     *
+     * @return AckDoc
+     */
     public function test($category, $param)  {
 
         $doc = $this->getRepository()->findOneBy([
@@ -42,7 +71,8 @@ class Ack {
     }
 
 
-    public function free($category, $param)
+
+    public function forget($category, $param)
     {
 
         $doc = $this->getRepository()->findOneBy([
@@ -52,7 +82,7 @@ class Ack {
 
         if ($doc) {
             $this->odm->remove($doc);
-            $this->odm->flush();
+            $this->odm->flush($doc);
 
             return true;
         }
