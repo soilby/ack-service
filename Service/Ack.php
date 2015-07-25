@@ -35,7 +35,7 @@ class Ack {
         return null;
     }
 
-    public function place($category, $param) {
+    public function place($category, $param, $flush = true) {
         $doc = $this->test($category, $param);
         if ($doc)   {
             $doc->increaseTimes();
@@ -49,8 +49,13 @@ class Ack {
         }
         $doc->setLastDate(new \DateTime());
 
+        if ($flush) {
+            $this->odm->flush($doc);
+        }
+    }
 
-        $this->odm->flush($doc);
+    public function flush() {
+        $this->odm->flush();
     }
 
     /**
@@ -63,7 +68,7 @@ class Ack {
 
         $doc = $this->getRepository()->findOneBy([
             'category' => $category,
-            'param' => $param
+            'ackParam' => $param
         ]);
 
 
@@ -77,7 +82,7 @@ class Ack {
 
         $doc = $this->getRepository()->findOneBy([
             'category' => $category,
-            'param' => $param
+            'ackParam' => $param
         ]);
 
         if ($doc) {
